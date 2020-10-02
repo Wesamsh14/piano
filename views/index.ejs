@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Piano</title>
+        <script>
+            const currentSong = <%- JSON.stringify(locals.song) || 'undefined' %>
+        </script>
+        <link rel="stylesheet" href="/style.css">
+        <script defer src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
+        <script defer src="/script.js"></script>
+    </head>
+    <body>
+        <div id="all_songs">
+            <button class="btn" id="get_all_songs">Get All Songs</button>
+            <div>
+                <ul id="all_songs_list"></ul>
+            </div>
+            
+        </div>
+        <% if(locals.song) { %>
+            <h2>song: <%= locals.song.name %> </h2>
+        <% } %>
+        <div class="buttons">
+            <% if (locals.song == null) { %>
+                <button class="record-button btn">Record</button>
+                <button class="save-button btn">Save</button>
+            <% } else { %>
+                <a href="/" class="btn">Record New Song</a>
+            <% } %>
+            <button class="play-button btn <%= locals.song != null ? 'show' : '' %>">Play</button>
+        </div>
+        <p id='record_time'></p>
+        <!-- <div class="piano">
+            <div data-note="C" class="key white">z</div>
+            <div data-note="Db" class="key black">s</div>
+            <div data-note="D" class="key white">x</div>
+            <div data-note="Eb" class="key black">d</div>
+            <div data-note="E" class="key white">c</div>
+            <div data-note="F" class="key white">v</div>
+            <div data-note="Gb" class="key black">g</div>
+            <div data-note="G" class="key white">b</div>
+            <div data-note="Ab" class="key black">h</div>
+            <div data-note="A" class="key white">n</div>
+            <div data-note="Bb" class="key black">j</div>
+            <div data-note="B" class="key white">m</div>
+        </div> -->
+        <div class="piano">
+            <!-- <div data-note="C3" class="key white">C</div>
+            <div data-note="C-3" class="key black">c</div>
+            <div data-note="D3" class="key white">D</div>
+            <div data-note="D-3" class="key black">d</div>
+            <div data-note="E3" class="key white">E</div>
+            <div data-note="F3" class="key white">F</div>
+            <div data-note="F-3" class="key black">f</div>
+            <div data-note="G3" class="key white">G</div>
+            <div data-note="G-3" class="key black">g</div> -->
+            <div data-note="A3" class="key white">A</div>
+            <div data-note="A-3" class="key black">a</div>
+            <div data-note="B3" class="key white">B</div>
+            <div data-note="C4" class="key white">C</div>
+            <div data-note="C-4" class="key black">c</div>
+            <div data-note="D4" class="key white">D</div>
+            <div data-note="D-4" class="key black">d</div>
+            <div data-note="E4" class="key white">E</div>
+            <div data-note="F4" class="key white">F</div>
+            <div data-note="F-4" class="key black">f</div>
+            <div data-note="G4" class="key white">G</div>
+            <div data-note="G-4" class="key black">g</div>
+            <div data-note="A4" class="key white">A</div>
+            <div data-note="A-4" class="key black">a</div>
+            <div data-note="B4" class="key white">B</div>
+            <div data-note="C5" class="key white">C</div>
+            <div data-note="C-5" class="key black">c</div>
+            <div data-note="D5" class="key white">D</div>
+            <!-- <div data-note="D-5" class="key black">d</div>
+            <div data-note="E5" class="key white">E</div>
+            <div data-note="F5" class="key white">F</div>
+            <div data-note="F-5" class="key black">f</div>
+            <div data-note="G5" class="key white">G</div>
+            <div data-note="G-5" class="key black">g</div>
+            <div data-note="A5" class="key white">A</div>
+            <div data-note="A-5" class="key black">a</div>
+            <div data-note="B5" class="key white">B</div>
+            <div data-note="C6" class="key white">C</div> -->
+        </div>
+
+        <audio id="C" src="/notes/C.mp3"></audio>
+        <audio id="Db" src="/notes/Db.mp3"></audio>
+        <audio id="D" src="/notes/D.mp3"></audio>
+        <audio id="Eb" src="/notes/Eb.mp3"></audio>
+        <audio id="E" src="/notes/E.mp3"></audio>
+        <audio id="F" src="/notes/F.mp3"></audio>
+        <audio id="Gb" src="/notes/Gb.mp3"></audio>
+        <audio id="G" src="/notes/G.mp3"></audio>
+        <audio id="Ab" src="/notes/Ab.mp3"></audio>
+        <audio id="A" src="/notes/A.mp3"></audio>
+        <audio id="Bb" src="/notes/Bb.mp3"></audio>
+        <audio id="B" src="/notes/B.mp3"></audio>
+
+        <audio id="C3" src="/piano_notes/c3.mp3"></audio>
+        <audio id="C-3" src="/piano_notes/c-3.mp3"></audio>
+        <audio id="D3" src="/piano_notes/d3.mp3"></audio>
+        <audio id="D-3" src="/piano_notes/d-3.mp3"></audio>
+        <audio id="E3" src="/piano_notes/e3.mp3"></audio>
+        <audio id="F3" src="/piano_notes/f3.mp3"></audio>
+        <audio id="F-3" src="/piano_notes/f-3.mp3"></audio>
+        <audio id="G3" src="/piano_notes/g3.mp3"></audio>
+        <audio id="G-3" src="/piano_notes/g-3.mp3"></audio>
+        <audio id="A3" src="/piano_notes/a3.mp3"></audio>
+        <audio id="A-3" src="/piano_notes/a-3.mp3"></audio>
+        <audio id="B3" src="/piano_notes/b3.mp3"></audio>
+        <audio id="C4" src="/piano_notes/c4.mp3"></audio>
+        <audio id="C-4" src="/piano_notes/c-4.mp3"></audio>
+        <audio id="D4" src="/piano_notes/d4.mp3"></audio>
+        <audio id="D-4" src="/piano_notes/d-4.mp3"></audio>
+        <audio id="E4" src="/piano_notes/e4.mp3"></audio>
+        <audio id="F4" src="/piano_notes/f4.mp3"></audio>
+        <audio id="F-4" src="/piano_notes/f-4.mp3"></audio>
+        <audio id="G4" src="/piano_notes/g4.mp3"></audio>
+        <audio id="G-4" src="/piano_notes/g-4.mp3"></audio>
+        <audio id="A4" src="/piano_notes/a4.mp3"></audio>
+        <audio id="A-4" src="/piano_notes/a-4.mp3"></audio>
+        <audio id="B4" src="/piano_notes/b4.mp3"></audio>
+        <audio id="C5" src="/piano_notes/c5.mp3"></audio>
+        <audio id="C-5" src="/piano_notes/c-5.mp3"></audio>
+        <audio id="D5" src="/piano_notes/d5.mp3"></audio>
+        <audio id="D-5" src="/piano_notes/d-5.mp3"></audio>
+        <audio id="E5" src="/piano_notes/e5.mp3"></audio>
+        <audio id="F5" src="/piano_notes/f5.mp3"></audio>
+        <audio id="F-5" src="/piano_notes/f-5.mp3"></audio>
+        <audio id="G5" src="/piano_notes/g5.mp3"></audio>
+        <audio id="G-5" src="/piano_notes/g-5.mp3"></audio>
+        <audio id="A5" src="/piano_notes/a5.mp3"></audio>
+        <audio id="A-5" src="/piano_notes/a-5.mp3"></audio>
+        <audio id="B5" src="/piano_notes/b5.mp3"></audio>
+        <audio id="C6" src="/piano_notes/c6.mp3"></audio>
+    </body>
+</html>
